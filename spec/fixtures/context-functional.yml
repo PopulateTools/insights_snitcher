@@ -1,0 +1,8 @@
+---
+data_column: amount
+time_column: year
+group_column: code
+template_variables:
+  unit: € # € / habitante
+  concept: REEMPLAZAME
+  subject: Madrid
