@@ -24,4 +24,28 @@ describe InsightsSnitcher do
       output = snitcher.detect
     end
   end
+
+  context 'Given an scenario with filters and a dataset' do
+    let(:dataset) { 'spec/fixtures/madrid-functional-G.json' }
+    let(:context) do
+      {
+        data_column: 'amount',
+        time_column: 'year',
+        filters: {
+          code: '172'
+        },
+        template_variables: {
+          unit: '€',
+          concept: 'Jardines',
+          subject: 'Madrid'
+        }
+      }
+    end
+
+    it 'should load' do
+      snitcher = InsightsSnitcher::Detector.new dataset: dataset, context: context
+      output = snitcher.detect
+    end
+  end
+
 end

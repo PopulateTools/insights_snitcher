@@ -15,6 +15,7 @@ module InsightsSnitcher
 
         years = @dataset.map{ |row| row[time_column].to_i }.sort.reverse
         last_year = years.shift
+        return [] if years.length < 2
 
         (years.length - 3...years.length).map do |length|
           selected_years = years[0...length]

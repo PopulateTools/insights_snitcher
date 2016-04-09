@@ -12,10 +12,19 @@ module InsightsSnitcher
   class Detector
     def initialize(options)
       @context = options.fetch(:context)
+
       dataset = options.fetch(:dataset)
 
       raise "Missing file #{dataset}" unless File.file?(dataset)
       @dataset = JSON.parse(File.read(dataset))
+
+      @dataset = @dataset.sort_by{ |h| h[time_column].to_i }
+
+      if @context[:filters]
+        filter_column = @context[:filters].keys.first
+        filter_value = @context[:filters].values.first
+        @dataset = @dataset.select{ |row| row[filter_column.to_s] == filter_value }
+      end
 
       @insights = {
         data_column => {}
@@ -43,6 +52,10 @@ module InsightsSnitcher
 
     def data_column
       @context[:data_column]
+    end
+
+    def time_column
+      @context[:time_column]
     end
 
   end

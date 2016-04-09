@@ -11,10 +11,10 @@ module InsightsSnitcher
       def data
         @dataset.map do |row|
           context_variables.merge({
-            time: row[time_column],
+            time: row[time_column].to_i,
             value: Formatter.format_money(row[data_column])
           })
-        end
+        end.sort_by{ |h| h[:time] }
       end
     end
   end

@@ -36,6 +36,9 @@ module InsightsSnitcher
             found_trend = true
             time = 2
             comparation_direction = 'subiendo'
+            if trends[2] > 0
+              time = 2
+            end
           end
         end
 
@@ -44,16 +47,21 @@ module InsightsSnitcher
             found_trend = true
             time = 2
             comparation_direction = 'bajando'
+            if trends[2] < 0
+              time = 3
+            end
           end
         end
 
         if found_trend
           # Return an array with one element
-          context_variables.merge({
-            'time': last_year,
-            'time_unit': time_unit,
-            'comparation_direction': comparation_direction,
-          }).to_a
+          [
+            context_variables.merge({
+              time: time,
+              time_unit: time_unit,
+              comparation_direction: comparation_direction
+            })
+          ]
         else
           []
         end
