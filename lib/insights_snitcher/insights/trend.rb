@@ -14,7 +14,7 @@ module InsightsSnitcher
         found_trend = false
         time_unit = 'años'
 
-        years = @dataset.map{ |row| row[@context['time_column']].to_i }.sort.reverse
+        years = @dataset.map{ |row| row[time_column].to_i }.sort.reverse
         return [] if years.length < 3
 
         last_year = years.shift
@@ -25,8 +25,8 @@ module InsightsSnitcher
         # 2,3
         # 3,4
         0.upto(years.length-2) do |i|
-          data0 = @dataset.detect { |row| row[@context['time_column']].to_i == years[i] }[@context['data_column']]
-          data1 = @dataset.detect { |row| row[@context['time_column']].to_i == years[i+1] }[@context['data_column']]
+          data0 = @dataset.detect { |row| row[time_column].to_i == years[i] }[data_column]
+          data1 = @dataset.detect { |row| row[time_column].to_i == years[i+1] }[data_column]
           trends.push(data0 - data1)
         end
 

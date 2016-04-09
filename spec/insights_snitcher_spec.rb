@@ -7,11 +7,21 @@ describe InsightsSnitcher do
 
   context 'Given an scenario and a dataset' do
     let(:dataset) { 'spec/fixtures/madrid-total.json' }
-    let(:context) { 'spec/fixtures/context-totals.yml' }
+    let(:context) do
+      {
+        data_column: 'total_budget',
+        time_column: 'year',
+        template_variables: {
+          unit: '€',
+          concept: 'presupuesto total',
+          subject: 'Madrid'
+        }
+      }
+    end
 
     it 'should load' do
       snitcher = InsightsSnitcher::Detector.new dataset: dataset, context: context
-      snitcher.detect
+      output = snitcher.detect
     end
   end
 end

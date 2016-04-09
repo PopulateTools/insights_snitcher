@@ -11,37 +11,39 @@ Dir["#{File.dirname(__FILE__)}/**/*.rb"].each {|file| require file }
 module InsightsSnitcher
   class Detector
     def initialize(options)
+      @context = options.fetch(:context)
       dataset = options.fetch(:dataset)
-      context = options.fetch(:context)
 
       raise "Missing file #{dataset}" unless File.file?(dataset)
-      raise "Missing file #{context}" unless File.file?(context)
-
       @dataset = JSON.parse(File.read(dataset))
-      @context = YAML.load(File.read(context))
 
-      @insights = []
+      @insights = {
+        data_column => {}
+      }
     end
 
     def detect
-      puts 'Dataset'
-      puts @dataset
+      @insights[data_column].merge! InsightsSnitcher::Insights::Plain.new(dataset: @dataset, context: @context).extract
 
-      puts 'Context'
-      puts @context
-
-      InsightsSnitcher::Insights::Plain.new(dataset: @dataset, context: @context).extract
-
-      InsightsSnitcher::Insights::ComparePercentageWithOther.new(dataset: @dataset, context: @context).extract
+      @insights[data_column].merge! InsightsSnitcher::Insights::ComparePercentageWithOther.new(dataset: @dataset, context: @context).extract
 
       # Disabled
-      # InsightsSnitcher::Insights::CompareValueWithOther.new(dataset: @dataset, context: @context).extract
+      # @insights.concat InsightsSnitcher::Insights::CompareValueWithOther.new(dataset: @dataset, context: @context).extract
 
-      InsightsSnitcher::Insights::CompareMeanWithPercentage.new(dataset: @dataset, context: @context).extract
+      @insights[data_column].merge! InsightsSnitcher::Insights::CompareMeanWithPercentage.new(dataset: @dataset, context: @context).extract
 
-      InsightsSnitcher::Insights::Trend.new(dataset: @dataset, context: @context).extract
+      @insights[data_column].merge! InsightsSnitcher::Insights::Trend.new(dataset: @dataset, context: @context).extract
 
-      InsightsSnitcher::Insights::Period.new(dataset: @dataset, context: @context).extract
+      @insights[data_column].merge! InsightsSnitcher::Insights::Period.new(dataset: @dataset, context: @context).extract
+
+      @insights.to_json
     end
+
+    private
+
+    def data_column
+      @context[:data_column]
+    end
+
   end
 end

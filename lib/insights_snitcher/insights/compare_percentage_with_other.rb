@@ -13,13 +13,13 @@ module InsightsSnitcher
       def data
 
         @dataset.map do |row|
-          time_row = row[@context['time_column']]
-          value_row = row[@context['data_column']]
+          time_row = row[time_column]
+          value_row = row[data_column]
 
           @dataset.map do |other_row|
-            time_other_row = other_row[@context['time_column']]
+            time_other_row = other_row[time_column]
             next if time_row == time_other_row
-            value_other_row = other_row[@context['data_column']]
+            value_other_row = other_row[data_column]
 
             comparation_value = (value_row.to_f - value_other_row.to_f)/value_other_row.to_f * 100
             next if comparation_value.abs < RELEVANCE

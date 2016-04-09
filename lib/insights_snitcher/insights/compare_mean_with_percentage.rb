@@ -13,7 +13,7 @@ module InsightsSnitcher
       def data
         time_unit = 'años'
 
-        years = @dataset.map{ |row| row[@context['time_column']].to_i }.sort.reverse
+        years = @dataset.map{ |row| row[time_column].to_i }.sort.reverse
         last_year = years.shift
 
         (years.length - 3...years.length).map do |length|
@@ -23,12 +23,12 @@ module InsightsSnitcher
           value = nil
           mean = 0
           @dataset.each do |row|
-            time_row = row[@context['time_column']].to_i
-            value = row[@context['data_column']].to_f if last_year == time_row
+            time_row = row[time_column].to_i
+            value = row[data_column].to_f if last_year == time_row
 
             next unless selected_years.include?(time_row)
 
-            mean += row[@context['data_column']].to_f
+            mean += row[data_column].to_f
           end
           mean = mean / selected_years.length
           comparation_value = (value.to_f - mean.to_f)/mean.to_f * 100

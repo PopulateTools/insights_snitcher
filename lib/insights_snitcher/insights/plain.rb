@@ -11,8 +11,8 @@ module InsightsSnitcher
       def data
         @dataset.map do |row|
           context_variables.merge({
-            'time': row[@context['time_column']],
-            'value': Formatter.format_money(row[@context['data_column']])
+            time: row[time_column],
+            value: Formatter.format_money(row[data_column])
           })
         end
       end

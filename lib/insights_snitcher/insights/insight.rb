@@ -8,17 +8,32 @@ module InsightsSnitcher
       end
 
       def extract
+        insights = {
+          self.class.name.underscore => []
+        }
         puts self.class.name
         puts
         data.each do |occurrence|
-          puts " * " + Mustache.render(template, occurrence)
+          insight = Mustache.render(template, occurrence)
+          puts " * " + insight
+          insights[self.class.name.underscore].push insight
         end
+
+        insights
       end
 
       private
 
       def context_variables
-        @context['template_variables']
+        @context[:template_variables]
+      end
+
+      def time_column
+        @context[:time_column]
+      end
+
+      def data_column
+        @context[:data_column]
       end
 
     end

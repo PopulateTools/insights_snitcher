@@ -9,13 +9,13 @@ module InsightsSnitcher
       private
 
       def data
-        years = @dataset.map{ |row| row[@context['time_column']].to_i }.sort.reverse
+        years = @dataset.map{ |row| row[time_column].to_i }.sort.reverse
         return [] if years.length < 3
 
         results = []
         2.upto(years.length-1) do |i|
-          data0 = @dataset.detect { |row| row[@context['time_column']].to_i == years[0] }[@context['data_column']]
-          data1 = @dataset.detect { |row| row[@context['time_column']].to_i == years[i] }[@context['data_column']]
+          data0 = @dataset.detect { |row| row[time_column].to_i == years[0] }[data_column]
+          data1 = @dataset.detect { |row| row[time_column].to_i == years[i] }[data_column]
           comparation_value = data0 - data1
           comparation_direction = comparation_value > 0 ? 'subido' : 'bajado'
 
