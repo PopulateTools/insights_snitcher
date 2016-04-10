@@ -8,7 +8,7 @@ module InsightsSnitcher
 
       private
 
-      RELEVANCE = 1.5
+      RELEVANCE = 5.0
 
       def data
         time_unit = 'años'
@@ -19,6 +19,7 @@ module InsightsSnitcher
 
         (years.length - 3...years.length).map do |length|
           selected_years = years[0...length]
+          next if selected_years.length < 2
           mean_period = selected_years.length
 
           value = nil

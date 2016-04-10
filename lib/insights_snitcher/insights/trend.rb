@@ -12,6 +12,7 @@ module InsightsSnitcher
 
       def data
         found_trend = false
+        time = 0
         time_unit = 'años'
 
         years = @dataset.map{ |row| row[time_column].to_i }.sort.reverse
@@ -20,10 +21,6 @@ module InsightsSnitcher
         last_year = years.shift
         trend = 1
         trends = []
-        # 0,1
-        # 1,2
-        # 2,3
-        # 3,4
         0.upto(years.length-2) do |i|
           data0 = @dataset.detect { |row| row[time_column].to_i == years[i] }[data_column]
           data1 = @dataset.detect { |row| row[time_column].to_i == years[i+1] }[data_column]
@@ -32,22 +29,22 @@ module InsightsSnitcher
 
         # TODO: make this search dynamic
         if trends[0] > 0
-          if trends[1] > 0
+          if trends[1] && trends[1] > 0
             found_trend = true
             time = 2
             comparation_direction = 'subiendo'
-            if trends[2] > 0
-              time = 2
+            if trends[2] && trends[2] > 0
+              time = 3
             end
           end
         end
 
         if trends[0] < 0
-          if trends[1] < 0
+          if trends[1] && trends[1] < 0
             found_trend = true
             time = 2
             comparation_direction = 'bajando'
-            if trends[2] < 0
+            if trends[2] && trends[2] < 0
               time = 3
             end
           end

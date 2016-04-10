@@ -12,6 +12,7 @@ module InsightsSnitcher
 
       def data
         row = @dataset.pop
+        return [] if row.nil?
 
         time_row = row[time_column]
         value_row = row[data_column]

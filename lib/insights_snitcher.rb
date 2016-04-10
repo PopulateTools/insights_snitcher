@@ -32,7 +32,10 @@ module InsightsSnitcher
     end
 
     def detect
-      @insights[data_column].merge! InsightsSnitcher::Insights::Plain.new(dataset: @dataset, context: @context).extract
+      return [].to_json if  @dataset.empty?
+
+      # Plain
+      #@insights[data_column].merge! InsightsSnitcher::Insights::Plain.new(dataset: @dataset, context: @context).extract
 
       @insights[data_column].merge! InsightsSnitcher::Insights::ComparePercentageWithOther.new(dataset: @dataset, context: @context).extract
 
